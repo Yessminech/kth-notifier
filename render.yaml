@@ -3,16 +3,10 @@ services:
     name: kthesisbot-worker
     runtime: python3
     region: frankfurt
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python bot.py"
     envVars:
-      BOT_TOKEN: 
+      - key: BOT_TOKEN
         sync: false
-      CHAT_ID: 
+      - key: CHAT_ID
         sync: false
-
-cronJobs:
-  - name: daily-check
-    schedule: "30 7 * * *"
-    workerName: kthesisbot-worker
-    command: "python bot.py"
