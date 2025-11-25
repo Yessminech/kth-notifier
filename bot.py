@@ -47,20 +47,38 @@ def fetch_offers():
     return offers
 
 def run():
+    print("🔍 Starting KTH Offer Check...")
+
     seen = load_seen()
+    print(f"Seen offers so far: {len(seen)}")
+
     offers = fetch_offers()
+
+    if not offers:
+        print("⚠️ No offers fetched. Possibly API changed or blocked.")
+        return
+
+    print(f"Fetched {len(offers)} offers from portal.")
+
     new_offers = []
 
     for title, url in offers:
         if title not in seen:
             new_offers.append((title, url))
 
+    if not new_offers:
+        print("ℹ️ No new offers found.")
+    else:
+        print(f"🔥 {len(new_offers)} new offer(s) found. Sending notifications...")
+
     for title, url in new_offers:
         msg = f"🔥 New KTH thesis offer:\n\n{title}\n➡️ {url}"
         bot.send_message(chat_id=CHAT_ID, text=msg)
         seen.add(title)
+        print(f"📩 Sent: {title}")
 
     save_seen(seen)
+    print("✅ Finished run.")
 
 
 if __name__ == "__main__":
